@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <!-- Primary Meta -->
+    <title>Cloud With David</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Hands-on labs, builds, write-ups, and everything I publish &mdash; building toward Cloud / AI architecture." />
+    <meta name="author" content="David Rodriguez" />
+    <link rel="canonical" href="https://cloudwithdavid.com/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Cloud With David" />
+    <meta property="og:title" content="Cloud With David | Cloud Engineering" />
+    <meta property="og:description" content="Hands-on labs, builds, write-ups, and everything I publish &mdash; building toward Cloud / AI architecture." />
+    <meta property="og:url" content="https://cloudwithdavid.com/" />
+    <meta property="og:image" content="https://cloudwithdavid.com/assets/og/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Cloud With David OG image: blue cloud character with glowing eyes." />
+
+    <!-- Twitter/X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@cloudwithdavid" />
+    <meta name="twitter:title" content="Cloud With David | Cloud Engineering" />
+    <meta name="twitter:creator" content="@cloudwithdavid" />
+    <meta name="twitter:description" content="Hands-on labs, builds, write-ups, and everything I publish &mdash; building toward Cloud / AI architecture." />
+    <meta name="twitter:image" content="https://cloudwithdavid.com/assets/og/og-image.png" />
+    <meta name="twitter:image:alt" content="Cloud With David OG image: blue cloud character with glowing eyes." />
+
+    <!-- Robots -->
+    <meta name="robots" content="noindex,nofollow" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Syne:wght@600;700&amp;display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" sizes="16x16 32x32 48x48" href="/assets/favicon/cloud-circuit.ico">
+    <link rel="icon" type="image/svg+xml" sizes="any" href="/assets/favicon/cloud-circuit.svg?v=cloud-circuit-20261019">
+    <link rel="manifest" href="/assets/favicon/site.webmanifest">
+
+    <script>
+        (() => {
+            const fallbackTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            const urlTheme = new URLSearchParams(window.location.search).get('theme');
+            let theme = fallbackTheme;
+
+            if (urlTheme === 'light' || urlTheme === 'dark') {
+                theme = urlTheme;
+            } else {
+                try {
+                    const storedTheme = localStorage.getItem('cwd-theme');
+                    if (storedTheme === 'light' || storedTheme === 'dark') {
+                        theme = storedTheme;
+                    }
+                } catch {}
+            }
+
+            document.documentElement.setAttribute('data-theme', theme);
+            document.documentElement.style.colorScheme = theme;
+        })();
+    </script>
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/style.css?v=hover-fix-2">
+
+    <!-- JSON-LD Entity Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://cloudwithdavid.com/#website",
+          "name": "Cloud With David",
+          "alternateName": ["cloudwithdavid", "CloudWithDavid"],
+          "url": "https://cloudwithdavid.com/",
+          "publisher": { "@id": "https://cloudwithdavid.com/#brand" }
+        },
+        {
+          "@type": ["Organization", "Brand"],
+          "@id": "https://cloudwithdavid.com/#brand",
+          "name": "Cloud With David",
+          "alternateName": ["cloudwithdavid", "CloudWithDavid"],
+          "url": "https://cloudwithdavid.com/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://cloudwithdavid.com/assets/og/og-image.png"
+          },
+          "sameAs": [
+            "https://github.com/cloudwithdavid",
+            "https://cloudwithdavid.hashnode.dev/",
+            "https://cloudwithdavid.substack.com",
+            "https://www.youtube.com/@cloudwithdavid",
+            "https://x.com/cloudwithdavid"
+          ],
+          "founder": { "@id": "https://cloudwithdavid.com/#person" }
+        },
+        {
+          "@type": "Person",
+          "@id": "https://cloudwithdavid.com/#person",
+          "name": "David Rodriguez",
+          "url": "https://cloudwithdavid.com/",
+          "description": "David Rodriguez is the creator of Cloud With David - documenting cloud projects, hands-on labs, and clear technical writing while building toward Cloud / AI architecture.",
+          "image": "https://cloudwithdavid.com/assets/og/og-image.png",
+          "sameAs": [
+            "https://www.linkedin.com/in/cloudwithdavid/"
+          ],
+          "worksFor": { "@id": "https://cloudwithdavid.com/#brand" }
+        }
+      ]
+    }
+    </script>
+</head>
+<body>
+    <!-- ============================
+         Scroll Progress Bar
+         ============================ -->
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+    <!-- ============================
+         Navigation
+         ============================ -->
+    <nav class="navbar" id="navbar" aria-label="Main navigation">
+        <div class="container">
+            <a href="/#" class="nav-brand" aria-label="CloudWithDavid home">
+                <img class="brand-mark" src="assets/favicon/cloud-circuit.svg" alt="" width="40" height="40">
+                <span class="brand-text">Cloud<span class="brand-accent"> With</span> David</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <div class="theme-segmented theme-segmented--nav" role="group" aria-label="Choose theme mode">
+                    <button type="button" class="theme-segment theme-segment--toggle" data-theme-toggle aria-label="Toggle theme">
+                        <span class="theme-segment-icon" aria-hidden="true"><i class="fas fa-moon" data-theme-toggle-icon></i></span>
+                    </button>
+                </div>
+                <button type="button" class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-controls="navLinks" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+    <!-- ============================
+         Hero Section
+         ============================ -->
+    <section class="page-section hero hero--ai" id="hero">
+        <div class="hero-gradient-line" aria-hidden="true"></div>
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        <span>Cloud<span class="brand-accent"> With</span> David</span>
+                    </h1>
+                    <h2 class="hero-subtitle">
+                        <span>Cloud <span class="hero-subtitle-dot">&middot;</span> Operations <span class="hero-subtitle-dot">&middot;</span> Applied AI </span>
+                    </h2>
+                    <p class="hero-description">
+                        Documenting cloud projects and foundational insights on my path to cloud / AI architecture.
+                    </p>
+                    <div class="hero-cta">
+                        <a href="/assets/DavidRodriguez_Resume.pdf" download="David_Rodriguez_Cloud Engineer_Resume.pdf" class="btn btn-secondary btn-secondary-filled">
+                            <span>Resume</span>
+                        </a>
+                        <a href="#contact" class="btn btn-secondary btn-secondary-cyan">
+                            <span>Contact Me</span>
+                        </a>
+                        <a href="#projects" class="btn btn-secondary btn-secondary-filled">
+                            <span>Projects</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="hero-social">
+                        <a href="https://linkedin.com/in/cloudwithdavid" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="social-link--linkedin">
+                            <svg class="social-svg social-svg--linkedin" viewBox="0 0 382 382" aria-hidden="true" focusable="false">
+                                <!-- Shared icon geometry for the hero and footer. -->
+                                <defs>
+                                    <path id="linkedin-badge" d="M347.445,0H34.555C15.471,0,0,15.471,0,34.555v312.889C0,366.529,15.471,382,34.555,382h312.889C366.529,382,382,366.529,382,347.444V34.555C382,15.471,366.529,0,347.445,0z"></path>
+                                    <path id="linkedin-detail" d="M118.207,329.844c0,5.554-4.502,10.056-10.056,10.056H65.345c-5.554,0-10.056-4.502-10.056-10.056V150.403c0-5.554,4.502-10.056,10.056-10.056h42.806c5.554,0,10.056,4.502,10.056,10.056V329.844z M86.748,123.432c-22.459,0-40.666-18.207-40.666-40.666S64.289,42.1,86.748,42.1s40.666,18.207,40.666,40.666S109.208,123.432,86.748,123.432z M341.91,330.654c0,5.106-4.14,9.246-9.246,9.246H286.73c-5.106,0-9.246-4.14-9.246-9.246v-84.168c0-12.556,3.683-55.021-32.813-55.021c-28.309,0-34.051,29.066-35.204,42.11v97.079c0,5.106-4.139,9.246-9.246,9.246h-44.426c-5.106,0-9.246-4.14-9.246-9.246V149.593c0-5.106,4.14-9.246,9.246-9.246h44.426c5.106,0,9.246,4.14,9.246,9.246v15.655c10.497-15.753,26.097-27.912,59.312-27.912c73.552,0,73.131,68.716,73.131,106.472L341.91,330.654L341.91,330.654z"></path>
+                                    <mask id="linkedin-idle-mask-hero">
+                                        <rect x="0" y="0" width="382" height="382" fill="#ffffff"></rect>
+                                        <use href="#linkedin-detail" fill="#000000"></use>
+                                    </mask>
+                                </defs>
+                                <use class="social-linkedin-badge" href="#linkedin-badge" mask="url(#linkedin-idle-mask-hero)"></use>
+                                <use class="social-linkedin-lettering" href="#linkedin-detail"></use>
+                            </svg>
+                        </a>
+                        <a href="https://github.com/cloudwithdavid" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="social-link--github"><i class="fab fa-github"></i></a>
+                        <a href="https://cloudwithdavid.hashnode.dev/" target="_blank" rel="noopener noreferrer" aria-label="Hashnode" class="social-link--hashnode"><i class="fab fa-hashnode"></i></a>
+                        <a href="https://www.youtube.com/@cloudwithdavid" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="social-link--youtube">
+                            <svg class="social-svg social-svg--youtube" viewBox="0 0 28.57 20" aria-hidden="true" focusable="false">
+                                <!-- Shared icon geometry for the hero and footer. -->
+                                <defs>
+                                    <path id="youtube-badge" d="M27.9727 3.12324C27.6435 1.89323 26.6768 0.926623 25.4468 0.597366C23.2197 0 14.285 0 14.285 0C14.285 0 5.35042 0 3.12323 0.597366C1.89323 0.926623 0.926623 1.89323 0.597366 3.12324C0 5.35042 0 10 0 10C0 10 0 14.6496 0.597366 16.8768C0.926623 18.1068 1.89323 19.0734 3.12323 19.4026C5.35042 20 14.285 20 14.285 20C14.285 20 23.2197 20 25.4468 19.4026C26.6768 19.0734 27.6435 18.1068 27.9727 16.8768C28.5701 14.6496 28.5701 10 28.5701 10C28.5701 10 28.5677 5.35042 27.9727 3.12324Z"></path>
+                                    <path id="youtube-detail" d="M11.4253 14.2854L18.8477 10.0004L11.4253 5.71533V14.2854Z"></path>
+                                    <mask id="youtube-idle-mask-hero">
+                                        <rect x="0" y="0" width="28.57" height="20" fill="#ffffff"></rect>
+                                        <use href="#youtube-detail" fill="#000000"></use>
+                                    </mask>
+                                </defs>
+                                <use class="social-youtube-badge" href="#youtube-badge" mask="url(#youtube-idle-mask-hero)"></use>
+                                <use class="social-youtube-play" href="#youtube-detail"></use>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="hero-clouds-wrapper" aria-hidden="true">
+                        <div class="hero-cloud-aura"></div>
+                        <svg class="hero-clouds" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
+                            <defs>
+                                <linearGradient id="heroCloudGradientBack" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop class="hero-cloud-stop--back-start" offset="0%" stop-color="#b1eaff"></stop>
+                                    <stop class="hero-cloud-stop--back-end" offset="100%" stop-color="#5bcdff"></stop>
+                                </linearGradient>
+                                <linearGradient id="heroCloudGradientFront" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop class="hero-cloud-stop--front-start" offset="0%" stop-color="#8be6ff"></stop>
+                                    <stop class="hero-cloud-stop--front-end" offset="100%" stop-color="#20d2fa"></stop>
+                                </linearGradient>
+                            </defs>
+                            <g class="hero-cloud--back">
+                                <path d="M74 182c-26 0-46-19-46-43 0-21 15-39 35-43 8-30 35-52 68-52 29 0 54 15 67 38h10c28 0 50 21 50 48 0 29-22 52-50 52H74Z" fill="url(#heroCloudGradientBack)"></path>
+                            </g>
+                            <g class="hero-cloud--front">
+                                <path d="M132 226c-24 0-44-19-44-42 0-22 16-39 37-42 8-30 34-52 66-52 28 0 52 14 64 36 4-1 8-1 12-1 27 0 49 21 49 47s-22 54-49 54H132Z" fill="url(#heroCloudGradientFront)"></path>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="hero-cards-layer">
+                        <a href="#skills-linux" class="floating-card card-4" aria-label="Go to Linux skill">
+                            <span class="floating-card-inner">
+                                <i class="fab fa-linux"></i>
+                                <span>Linux</span>
+                            </span>
+                        </a>
+                        <a href="#skills-networking" class="floating-card card-2" aria-label="Go to Networking skill">
+                            <span class="floating-card-inner">
+                                <i class="fas fa-network-wired"></i>
+                                <span>Networking</span>
+                            </span>
+                        </a>
+                        <a href="#skills-aws" class="floating-card card-1" aria-label="Go to AWS skill">
+                            <span class="floating-card-inner">
+                                <i class="fab fa-aws"></i>
+                                <span>AWS</span>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================
+         About Section
+         ============================ -->
+    <section id="about" class="page-section section about section-bg-wash">
+        <div class="container">
+            <div class="section-header section-header--side-label">
+                <h2 class="section-tag"><span class="section-tag-marker" aria-hidden="true">/</span><span>About</span></h2>
+            </div>
+            <div class="about-overview">
+                <div class="about-copy about-copy--stacked">
+                    <div class="about-intro-row">
+                        <figure class="about-portrait">
+                            <img src="assets/davidrodriguezimg.webp" alt="David Rodriguez">
+                        </figure>
+                        <div>
+                            <p class="about-copy-text">
+                            I&apos;m building toward cloud engineering with a strong foundation in AWS, Linux, and networking. My work spans infrastructure deployment & operations, automation, and applied AI, with an emphasis on architectural decisions and system behavior. <br><br>
+                            </p>
+                            <p class="about-copy-text">
+                            My strong interest in technology is understanding how complete systems fit together. I&apos;m naturally drawn to following the relationships between components, including how information flows, what each component depends on, and how everything behaves when something goes wrong. That inclination, alongside my fascination with intelligent, autonomous systems and conviction in their transformative potential, is what draws me toward building cloud and AI solutions.
+                            </p>
+                        </div>
+                    </div>
+                    <p class="about-copy-note">Admitted B.S. Cloud &amp; Network Engineering student at WGU <span class="about-copy-tail">(Target Q2 2028)</span></p>
+                </div>
+                <div class="about-signal-column">
+                    <article class="about-signal-card about-signal-card--primary">
+                        <h3 class="about-current-focus-title">Current Focus</h3>
+                        <h4><a class="about-project-link" href="https://github.com/cloudwithdavid/resilient-app-infrastructure" target="_blank" rel="noopener noreferrer">Resilient Application Infrastructure</a></h4>
+                        <p>AWS application infrastructure built with Terraform, featuring multi-AZ compute, private networking, RDS, CloudWatch monitoring, and GitHub Actions deployment using OIDC.</p>
+                        <h4>AWS re/Start at Per Scholas</h4>
+                        <p>Scenario-based cloud training covering Linux, Python, networking, security, databases, GenAI, automation, AWS Cloud, and professional readiness.</p>
+                    </article>
+                    <div class="about-certifications">
+                        <div class="about-certifications-header">
+                            <span class="about-meta-label">Certifications</span>
+                        </div>
+                        <div class="about-cert-pill-row">
+                            <div class="about-cert-item about-cert-item--track" role="status" aria-label="HashiCorp Certified: Terraform Associate track in progress">
+                                <span class="about-cert-loader" aria-hidden="true"></span>
+                                <span>HashiCorp Certified: Terraform Associate</span>
+                            </div>
+                            <div class="about-cert-item" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Open AWS Certified Solutions Architect - Associate credential" data-modal-type="image" data-modal-src="assets/certs/aws-saa.webp">
+                                <span class="about-cert-dot" aria-hidden="true"></span>
+                                <span>AWS Certified Solutions Architect - Associate</span>
+                            </div>
+                            <div class="about-cert-item" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Open AWS Certified Cloud Practitioner credential" data-modal-type="image" data-modal-src="assets/certs/aws-ccp.webp">
+                                <span class="about-cert-dot" aria-hidden="true"></span>
+                                <span>AWS Certified Cloud Practitioner</span>
+                            </div>
+                            <div class="about-cert-item" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Open ITIL v4 Foundation credential" data-modal-type="image" data-modal-src="assets/certs/itil-v4.webp">
+                                <span class="about-cert-dot" aria-hidden="true"></span>
+                                <span>ITIL v4 Foundation</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-signal-grid about-signal-grid--stats" aria-label="About metrics">
+                        <article class="about-signal-card about-signal-card--stat">
+                            <span class="about-meta-label">Portfolio Projects</span>
+                            <span class="about-stat-value stats-number" data-count="5">5</span>
+                            <span class="about-stat-caption">Total</span>
+                        </article>
+                        <article class="about-signal-card about-signal-card--stat">
+                            <span class="about-meta-label">Core Skill Areas</span>
+                            <span class="about-stat-value stats-number" data-count="6">6</span>
+                            <span class="about-stat-caption">Active</span>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================
+         Skills Section
+         ============================ -->
+    <section id="skills" class="page-section section skills">
+        <div class="container">
+            <div class="section-header section-header--side-label">
+                <h2 class="section-tag"><span class="section-tag-marker" aria-hidden="true">/</span><span>Skills</span></h2>
+            </div>
+            <div class="skills-grid">
+                <article id="skills-aws" class="skills-card">
+                    <div class="skills-card-header">
+                        <div class="skills-card-icon skills-card-icon--aws"><i class="fab fa-aws" aria-hidden="true"></i></div>
+                        <h3>AWS Infrastructure</h3>
+                    </div>
+                    <p>Deploying and validating compute, storage, and databases.</p>
+                    <ul class="skills-card-list">
+                        <li>EC2, load balancing, and Auto Scaling</li>
+                        <li>ECS deployment and task networking</li>
+                        <li>Storage recovery and RDS migration</li>
+                    </ul>
+                </article>
+                <article id="skills-cloud-operations" class="skills-card">
+                    <div class="skills-card-header">
+                        <div class="skills-card-icon skills-card-icon--operations"><i class="fas fa-server" aria-hidden="true"></i></div>
+                        <h3>Cloud Operations</h3>
+                    </div>
+                    <p>Managing, monitoring, and securing AWS workloads.</p>
+                    <ul class="skills-card-list">
+                        <li>Systems Manager patching and compliance</li>
+                        <li>CloudWatch monitoring and change alerts</li>
+                        <li>CloudTrail investigation and access containment</li>
+                    </ul>
+                </article>
+                <article id="skills-ai-workflow" class="skills-card">
+                    <div class="skills-card-header">
+                        <div class="skills-card-icon skills-card-icon--integration"><i class="fas fa-plug" aria-hidden="true"></i></div>
+                        <h3>Cloud Integration</h3>
+                    </div>
+                    <p>Connecting serverless workflows, APIs, and managed AI.</p>
+                    <ul class="skills-card-list">
+                        <li>Lambda, S3, EventBridge, and SNS</li>
+                        <li>Bedrock knowledge bases and MCP tools</li>
+                        <li>API requests and backend verification</li>
+                    </ul>
+                </article>
+                <article id="skills-networking" class="skills-card">
+                    <div class="skills-card-header">
+                        <div class="skills-card-icon skills-card-icon--networking"><i class="fas fa-network-wired" aria-hidden="true"></i></div>
+                        <h3>Networking</h3>
+                    </div>
+                    <p>Connectivity diagnosis across hosts and AWS networks.</p>
+                    <ul class="skills-card-list">
+                        <li>DNS, routing, and port troubleshooting</li>
+                        <li>Private subnet egress and service discovery</li>
+                        <li>Security groups and NACL controls</li>
+                    </ul>
+                </article>
+                <article id="skills-linux" class="skills-card">
+                    <div class="skills-card-header">
+                        <div class="skills-card-icon skills-card-icon--linux"><i class="fab fa-linux" aria-hidden="true"></i></div>
+                        <h3>Linux</h3>
+                    </div>
+                    <p>Service, log, permission, and filesystem investigation.</p>
+                    <ul class="skills-card-list">
+                        <li>Services and runtime troubleshooting</li>
+                        <li>Users, groups, and permissions</li>
+                        <li>Logs, mounts, and disk usage</li>
+                    </ul>
+                </article>
+                <article id="skills-python" class="skills-card">
+                    <div class="skills-card-header">
+                        <div class="skills-card-icon skills-card-icon--automation"><i class="fas fa-terminal" aria-hidden="true"></i></div>
+                        <h3 id="skills-git">Scripting &amp; Automation</h3>
+                    </div>
+                    <p>Practical tooling for diagnostics and operational tasks.</p>
+                    <ul class="skills-card-list">
+                        <li>Bash evidence and disk-triage utilities</li>
+                        <li>Python log analysis and file processing</li>
+                        <li>AWS CLI and Git workflows</li>
+                    </ul>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================
+         Projects Section
+         ============================ -->
+    <div class="section-bg-wash section-bg-wash--shared">
+    <section id="projects" class="page-section section projects">
+        <div class="container">
+            <div class="section-header section-header--side-label">
+                <h2 class="section-tag"><span class="section-tag-marker" aria-hidden="true">/</span><span>Projects</span></h2>
+            </div>
+            <div class="projects-grid">
+                <article class="project-card">
+                    <a class="project-cover-link" href="https://github.com/cloudwithdavid/resilient-app-infrastructure" target="_blank" rel="noopener noreferrer" aria-label="Open Resilient Application Infrastructure">
+                        <figure class="project-cover project-cover--diagram">
+                            <img src="assets/projects/resilient-infra/cover.svg" alt="Resilient Application Infrastructure AWS architecture diagram." width="1427" height="864" loading="lazy" decoding="async">
+                        </figure>
+                    </a>
+                    <div class="project-card-header">
+                        <div class="project-card-heading">
+                            <div class="project-title-row">
+                                <h3><a href="https://github.com/cloudwithdavid/resilient-app-infrastructure" target="_blank" rel="noopener noreferrer">Resilient Application Infrastructure</a></h3>
+                                <a class="project-github-link" href="https://github.com/cloudwithdavid/resilient-app-infrastructure" target="_blank" rel="noopener noreferrer" aria-label="Open Resilient Application Infrastructure on GitHub">
+                                    <i class="fab fa-github" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <p>Multi-AZ AWS application infrastructure provisioned with Terraform. Incorporates observability, failure testing, and controlled CI/CD.</p>
+                    <div class="project-tags">
+                        <span class="project-tag--technical">AWS</span>
+                        <span class="project-tag--technical">Terraform</span>
+                        <span class="project-tag--technical">Observability</span>
+                        <span class="project-tag--technical">CI/CD</span>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <a class="project-cover-link" href="https://github.com/cloudwithdavid/cloud-ai-platform" target="_blank" rel="noopener noreferrer" aria-label="Open Cloud &amp; AI Platform">
+                        <figure class="project-cover project-cover--diagram">
+                            <img src="assets/projects/cloud-ai-platform/cover.svg" alt="Cloud and AI Platform architecture diagram." width="2055" height="1217" loading="lazy" decoding="async">
+                        </figure>
+                    </a>
+                    <div class="project-card-header">
+                        <div class="project-card-heading">
+                            <div class="project-title-row">
+                                <h3><a href="https://github.com/cloudwithdavid/cloud-ai-platform" target="_blank" rel="noopener noreferrer">Cloud AI Platform</a></h3>
+                                <a class="project-github-link" href="https://github.com/cloudwithdavid/cloud-ai-platform" target="_blank" rel="noopener noreferrer" aria-label="Open Cloud AI Platform on GitHub">
+                                    <i class="fab fa-github" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <p>An AWS AI application project combining cloud engineering, AI systems integration, and reusable infrastructure deployment automation.</p>
+                    <div class="project-tags">
+                        <span class="project-tag--technical">AWS</span>
+                        <span class="project-tag--technical">DevOps</span>
+                        <span class="project-tag--technical">Generative AI</span>
+                        <span class="project-tag--technical">Platform as Code</span>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <a class="project-cover-link" href="https://github.com/cloudwithdavid/aws-restart" target="_blank" rel="noopener noreferrer" aria-label="Open AWS re/Start Portfolio">
+                        <figure class="project-cover">
+                            <img src="assets/projects/aws-restart/cover.webp" alt="AWS re/Start Portfolio project preview featuring AWS services and AWS re/Start artwork." loading="lazy" decoding="async">
+                        </figure>
+                    </a>
+                    <div class="project-card-header">
+                        <div class="project-card-heading">
+                            <div class="project-title-row">
+                                <h3><a href="https://github.com/cloudwithdavid/aws-restart" target="_blank" rel="noopener noreferrer">AWS re/Start Portfolio</a></h3>
+                                <a class="project-github-link" href="https://github.com/cloudwithdavid/aws-restart" target="_blank" rel="noopener noreferrer" aria-label="Open AWS re/Start Portfolio on GitHub">
+                                    <i class="fab fa-github" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <p>Elastic compute, cloud operations, storage & recovery, database migration, serverless systems, containers & orchestration, and agentic AI.</p>
+                    <div class="project-tags">
+                        <span class="project-tag--technical">AWS</span>
+                        <span class="project-tag--technical">Infrastructure</span>
+                        <span class="project-tag--technical">Operations</span>
+                        <span class="project-tag--technical">Automation</span>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <a class="project-cover-link" href="https://github.com/cloudwithdavid/systems-troubleshooting" target="_blank" rel="noopener noreferrer" aria-label="Open Systems Troubleshooting">
+                        <figure class="project-cover">
+                            <img src="assets/projects/systems-troubleshooting/cover.webp" alt="Systems Troubleshooting project preview." loading="lazy" decoding="async">
+                        </figure>
+                    </a>
+                    <div class="project-card-header">
+                        <div class="project-card-heading">
+                            <div class="project-title-row">
+                                <h3><a href="https://github.com/cloudwithdavid/systems-troubleshooting" target="_blank" rel="noopener noreferrer">Systems Troubleshooting</a></h3>
+                                <a class="project-github-link" href="https://github.com/cloudwithdavid/systems-troubleshooting" target="_blank" rel="noopener noreferrer" aria-label="Open Systems Troubleshooting on GitHub">
+                                    <i class="fab fa-github" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <p>CLI evidence gathering, automation, and systems troubleshooting through incident-style investigation.</p>
+                    <div class="project-tags">
+                        <span class="project-tag--technical">Linux</span>
+                        <span class="project-tag--technical">Networking</span>
+                        <span class="project-tag--technical">APIs</span>
+                        <span class="project-tag--technical">Automation</span>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <a class="project-cover-link" href="https://cloudwithdavid.com/" target="_blank" rel="noopener noreferrer" aria-label="Open Cloud With David [.com]">
+                        <figure class="project-cover">
+                            <img src="assets/projects/cloud-with-david-com/cover.webp" alt="Cloud With David [.com] project preview." loading="lazy" decoding="async">
+                        </figure>
+                    </a>
+                    <div class="project-card-header">
+                        <div class="project-card-heading">
+                            <div class="project-title-row">
+                                <h3><a href="https://cloudwithdavid.com/" target="_self">Cloud With David [.com]</a></h3>
+                                <a class="project-github-link" href="https://github.com/cloudwithdavid/cloudwithdavid-site" target="_blank" rel="noopener noreferrer" aria-label="Open Cloud With David [.com] on GitHub">
+                                    <i class="fab fa-github" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <p>Personal portfolio site designed and deployed to track progress, and showcase proofs.</p>
+                    <div class="project-tags">
+                        <span>UI/UX</span>
+                        <span>Brand</span>
+                        <span class="project-tag--technical">HTML/CSS</span>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============================
+         Blog Section
+         ============================ -->
+    <section id="blog" class="page-section section blog-preview">
+        <div class="container">
+            <div class="section-header section-header--side-label">
+                <h2 class="section-tag"><span class="section-tag-marker" aria-hidden="true">/</span><span>Blog</span></h2>
+            </div>
+            <div class="blog-grid">
+                <article class="blog-card blog-index-card">
+                    <a class="blog-cover-link" href="https://cloudwithdavid.hashnode.dev/looking-beneath-managed-services" target="_blank" rel="noopener noreferrer" aria-label="Read Looking Beneath Managed Services">
+                        <figure class="blog-cover blog-cover--card">
+                            <img src="/assets/blog/looking-beneath-managed-services/cover.webp" alt="Diagram of an AI assistant with RAG retrieval and AgentCore workflows beneath a managed interface." loading="lazy" decoding="async">
+                        </figure>
+                    </a>
+                    <h3><a href="https://cloudwithdavid.hashnode.dev/looking-beneath-managed-services" target="_blank" rel="noopener noreferrer">Looking Beneath Managed Services</a></h3>
+                    <p>Revisiting an AI assistant lab on AWS: what RAG, MCP, and AgentCore revealed about the engineering hiding beneath managed services.</p>
+                    <div class="blog-card-tags"><span>#AWS</span><span>#RAG</span><span>#AgenticAI</span></div>
+                    <div class="blog-card-footer">
+                        <div class="blog-card-footer__meta">
+                            <span><time datetime="2026-10-13">Oct 13, 2026</time></span>
+                            <span aria-hidden="true">&middot;</span>
+                            <span>6 min read</span>
+                        </div>
+                        <a href="https://cloudwithdavid.hashnode.dev/looking-beneath-managed-services" target="_blank" rel="noopener noreferrer" class="blog-link">Read Article <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                    </div>
+                </article>
+                <article class="blog-card blog-index-card">
+                    <a class="blog-cover-link" href="https://cloudwithdavid.hashnode.dev/revisiting-ssh-into-ec2-from-wsl" target="_blank" rel="noopener noreferrer" aria-label="Read Relearning SSH Into EC2 From WSL">
+                        <figure class="blog-cover blog-cover--card">
+                            <img src="/assets/blog/relearning-ssh-into-ec2-from-wsl/cover.webp" alt="Illustration of a laptop, SSH key folder, server stack, and lock over a dark code background." loading="lazy" decoding="async">
+                        </figure>
+                    </a>
+                    <h3><a href="https://cloudwithdavid.hashnode.dev/revisiting-ssh-into-ec2-from-wsl" target="_blank" rel="noopener noreferrer">Relearning SSH Into EC2 From WSL</a></h3>
+                    <p>Rebuilding the basics: keys, permissions, and the habits behind reliable SSH access.</p>
+                    <div class="blog-card-tags"><span>#AWS</span><span>#EC2</span><span>#Linux</span></div>
+                    <div class="blog-card-footer">
+                        <div class="blog-card-footer__meta">
+                            <span><time datetime="2026-05-13">May 13, 2026</time></span>
+                            <span aria-hidden="true">&middot;</span>
+                            <span>6 min read</span>
+                        </div>
+                        <a href="https://cloudwithdavid.hashnode.dev/revisiting-ssh-into-ec2-from-wsl" target="_blank" rel="noopener noreferrer" class="blog-link">Read Article <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                    </div>
+                </article>
+                <article class="blog-card blog-index-card">
+                    <a class="blog-cover-link" href="https://cloudwithdavid.hashnode.dev/passing-the-aws-certified-cloud-practitioner-exam" target="_blank" rel="noopener noreferrer" aria-label="Read Passing the AWS Certified Cloud Practitioner">
+                        <figure class="blog-cover blog-cover--card">
+                            <img src="/assets/blog/aws-ccp-guide/cover.webp" alt="AWS Certified Cloud Practitioner badge." loading="lazy" decoding="async">
+                        </figure>
+                    </a>
+                    <h3><a href="https://cloudwithdavid.hashnode.dev/passing-the-aws-certified-cloud-practitioner-exam" target="_blank" rel="noopener noreferrer">Passing the AWS Certified Cloud Practitioner</a></h3>
+                    <p>Study system, resources, and the approach that helped turn preparation into a passing result.</p>
+                    <div class="blog-card-tags"><span>#AWS</span><span>#Certification</span><span>#Guide</span></div>
+                    <div class="blog-card-footer">
+                        <div class="blog-card-footer__meta">
+                            <span><time datetime="2026-05-11">May 11, 2026</time></span>
+                            <span aria-hidden="true">&middot;</span>
+                            <span>9 min read</span>
+                        </div>
+                        <a href="https://cloudwithdavid.hashnode.dev/passing-the-aws-certified-cloud-practitioner-exam" target="_blank" rel="noopener noreferrer" class="blog-link">Read Article <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+    </div>
+
+    <!-- ============================
+         Contact Section
+         ============================ -->
+    <section id="contact" class="page-section section contact">
+        <div class="container">
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <div class="section-header contact-section-header">
+                        <h2 class="section-title">Let's Build <span class="gradient-text">Together</span></h2>
+                        <p class="section-subtitle">Follow the journey, explore the work, or get in touch</p>
+                    </div>
+                    <div class="contact-methods">
+                        <a href="mailto:hello@cloudwithdavid.com" class="contact-link">
+                            <div class="contact-link-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="contact-link-info">
+                                <strong>Email</strong>
+                                <span>hello@cloudwithdavid.com</span>
+                            </div>
+                            <i class="fas fa-arrow-right contact-link-arrow"></i>
+                        </a>
+                        <a href="https://linkedin.com/in/cloudwithdavid" target="_blank" rel="noopener noreferrer" class="contact-link">
+                            <div class="contact-link-icon"><i class="fab fa-linkedin"></i></div>
+                            <div class="contact-link-info">
+                                <strong>LinkedIn</strong>
+                                <span>Connect with me</span>
+                            </div>
+                            <i class="fas fa-external-link-alt contact-link-arrow"></i>
+                        </a>
+                        <a href="https://github.com/cloudwithdavid" target="_blank" rel="noopener noreferrer" class="contact-link">
+                            <div class="contact-link-icon"><i class="fab fa-github"></i></div>
+                            <div class="contact-link-info">
+                                <strong>GitHub</strong>
+                                <span>View my projects</span>
+                            </div>
+                            <i class="fas fa-external-link-alt contact-link-arrow"></i>
+                        </a>
+                        <a href="https://www.credly.com/users/cloudwithdavid/badges#credly" target="_blank" rel="noopener noreferrer" class="contact-link contact-link--credly">
+                            <div class="contact-link-icon">
+                                <svg class="credly-verification-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                    <path d="M12 2.75 19.25 5.8v5.05c0 4.77-2.88 8.98-7.25 10.4-4.37-1.42-7.25-5.63-7.25-10.4V5.8L12 2.75Z"></path>
+                                    <path d="m8.25 12.1 2.45 2.45 5.05-5.1"></path>
+                                </svg>
+                            </div>
+                            <div class="contact-link-info">
+                                <strong>Credly</strong>
+                                <span>View verified credentials</span>
+                            </div>
+                            <i class="fas fa-external-link-alt contact-link-arrow"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="contact-form-wrapper">
+                    <form class="contact-form" id="contactForm" name="contact" method="POST">
+                        <p class="form-honeypot" aria-hidden="true">
+                            <label for="bot-field">Don't fill this out if you're human:</label>
+                            <input type="text" id="bot-field" name="bot-field" tabindex="-1" autocomplete="off">
+                        </p>
+                        <h3>Send a Message</h3>
+                        <noscript>JavaScript is required to save a test submission.</noscript>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" name="name" maxlength="80" required placeholder="Your Name" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" maxlength="254" required placeholder="your@email.com" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" maxlength="160" required placeholder="What would you like to discuss?">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="5" maxlength="5000" required placeholder="Tell me about the project, idea, or opportunity..."></textarea>
+                        </div>
+                        <p class="form-status" id="formStatus" role="status" aria-live="assertive" aria-atomic="true"></p>
+
+                        <button type="submit" class="btn btn-primary btn-submit">
+                            <span>Save Test Submission</span>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    </main>
+
+    <!-- ============================
+         Footer
+         ============================ -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-panel">
+                <div class="footer-top">
+                    <div class="footer-identity">
+                        <a href="#" class="footer-brand">
+                            <img class="brand-mark" src="assets/favicon/cloud-circuit.svg" alt="" width="36" height="36">
+                            <span class="brand-text">Cloud<span class="brand-accent"> With</span> David</span>
+                        </a>
+                        <p class="footer-positioning"><span class="footer-positioning-text">Cloud <span aria-hidden="true">&middot;</span> Operations <span aria-hidden="true">&middot;</span> Applied AI </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <div class="footer-social">
+                            <a href="https://linkedin.com/in/cloudwithdavid" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="social-link--linkedin">
+                                <svg class="social-svg social-svg--linkedin" viewBox="0 0 382 382" aria-hidden="true" focusable="false">
+                                    <use class="social-linkedin-badge" href="#linkedin-badge" mask="url(#linkedin-idle-mask-hero)"></use>
+                                    <use class="social-linkedin-lettering" href="#linkedin-detail"></use>
+                                </svg>
+                            </a>
+                            <a href="https://github.com/cloudwithdavid" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="social-link--github"><i class="fab fa-github"></i></a>
+                            <a href="https://cloudwithdavid.hashnode.dev/" target="_blank" rel="noopener noreferrer" aria-label="Hashnode" class="social-link--hashnode"><i class="fab fa-hashnode"></i></a>
+                            <a href="https://www.youtube.com/@cloudwithdavid" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="social-link--youtube">
+                                <svg class="social-svg social-svg--youtube" viewBox="0 0 28.57 20" aria-hidden="true" focusable="false">
+                                    <use class="social-youtube-badge" href="#youtube-badge" mask="url(#youtube-idle-mask-hero)"></use>
+                                    <use class="social-youtube-play" href="#youtube-detail"></use>
+                                </svg>
+                            </a>
+                    </div>
+                    <p class="footer-copyright">
+                        &copy; 2026 Cloud With David. All rights reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Credential Modal -->
+    <div class="cert-modal" id="certModal" aria-hidden="true">
+        <div class="cert-modal-dialog" role="dialog" aria-modal="true" aria-label="Credential preview">
+            <button type="button" class="cert-modal-close" id="certModalClose" aria-label="Close credential preview">
+                <i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+            <div id="certModalContent"></div>
+        </div>
+    </div>
+
+
+    <script src="js/main.js"></script>
+</body>
+</html>

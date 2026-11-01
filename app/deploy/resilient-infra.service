@@ -1,0 +1,21 @@
+[Unit]
+Description=Resilient infrastructure demo contact API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=exec
+User=resilient-app
+Group=resilient-app
+WorkingDirectory=/opt/resilient-infra
+EnvironmentFile=/etc/resilient-infra/app.env
+ExecStart=/opt/resilient-infra/.venv/bin/gunicorn --no-control-socket --bind 127.0.0.1:8000 --workers 2 --worker-class gthread --threads 4 --timeout 40 --error-logfile - app.web:application
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target
