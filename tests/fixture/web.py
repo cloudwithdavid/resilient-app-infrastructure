@@ -6,7 +6,7 @@ from threading import BoundedSemaphore
 from http import HTTPStatus
 
 
-from app.backend import Backend, DiagnosticError, Settings
+from tests.fixture.backend import Backend, DiagnosticError, Settings
 
 MAX_BODY = 16384
 LIMITS = {"name": 80, "email": 254, "subject": 160, "message": 5000}
