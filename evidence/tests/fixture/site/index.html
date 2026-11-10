@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CP1 infrastructure validation</title>
+</head>
+<body>
+  <main>
+    <h1>Infrastructure validation fixture</h1>
+    <p>This application exists only to test the CP1 infrastructure. Use synthetic data.</p>
+    <form id="contact">
+      <p><label>Name <input name="name" value="Test User" required></label></p>
+      <p><label>Email <input name="email" type="email" value="test@example.com" required></label></p>
+      <p><label>Subject <input name="subject" value="CP1 infrastructure validation" required></label></p>
+      <p><label>Message <textarea name="message" required>Synthetic contact submission.</textarea></label></p>
+      <button type="submit">Submit test inquiry</button>
+    </form>
+    <p id="result" role="status"></p>
+  </main>
+  <script>
+    document.getElementById("contact").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const result = document.getElementById("result");
+      try {
+        const response = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(Object.fromEntries(new FormData(event.currentTarget)))
+        });
+        result.textContent = response.status === 201
+          ? "Synthetic submission accepted."
+          : "Submission failed (HTTP " + response.status + ").";
+      } catch {
+        result.textContent = "Submission failed: connection error.";
+      }
+    });
+  </script>
+</body>
+</html>
