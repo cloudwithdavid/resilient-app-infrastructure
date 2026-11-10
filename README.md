@@ -91,7 +91,7 @@ Manual provisioning makes environments difficult to recreate consistently, while
 -->
 ## Infrastructure Validation
 
-The `tests/fixture/` directory contains a small **supporting workload**, not an application-development deliverable. Its health endpoint and synthetic contact submission exercise the infrastructure's routing, instance initialization, secrets access, and RDS persistence. Run `python3 tests/smoke_test.py https://YOUR_CP1_DOMAIN` after deployment and during controlled resilience checks. See [validation fixture](tests/fixture/README.md) for its deployment contract.
+The `evidence/tests/fixture/` directory contains a small **supporting workload**, not an application-development deliverable. Its health endpoint and synthetic contact submission exercise the infrastructure's routing, instance initialization, secrets access, and RDS persistence. Run `python3 evidence/tests/smoke_test.py https://YOUR_CP1_DOMAIN` after deployment and during controlled resilience checks. See [validation fixture](evidence/tests/fixture/README.md) for its deployment contract.
 
 ---
 
